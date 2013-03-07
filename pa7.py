@@ -1,4 +1,6 @@
 import commands
+from apply_rules import *
+from andyrules import *
 
 f = open('dic', 'r')
 paragraph = open('paragraph.txt', 'r')
@@ -42,7 +44,7 @@ while idx < len(text) - 1:
     idx = current #start from text[current: ]
 
 translation = translation.encode('utf-8')
-print translation
+#print translation
 
 f = open('out.txt', 'w')
 f.write(translation)
@@ -52,7 +54,7 @@ commands.getoutput('./stanford-postagger.sh ./stanford-postagger/models/english-
 
 f = open('pos.txt', 'r')
 pos = f.read()
-print pos
+#print pos
 #print text
 #print len(text)
 #print dic
