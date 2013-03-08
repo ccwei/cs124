@@ -14,7 +14,7 @@ def process_pos_file(pos_filename):
 	print(tokens)
 	sentences = [[]]
 	for token in tokens:
-		if token.split("_")[1] == ".":
+		if token.split("_")[1] in [".", ",", "?"]:
 			sentences[-1].append([token.split("_")[0], token.split("_")[0]])
 			sentences.append([])
 		elif len(token) > 0:
