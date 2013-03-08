@@ -7,13 +7,10 @@ paragraph = open('paragraph.txt', 'r')
 dic = {}
 for line in f:
   parts = line.decode('utf-8').rstrip().split(' ')
-  print parts
   dic[parts[0]] =" ".join(parts[1:])
 f.close()
 
 text = paragraph.read().decode('utf-8').rstrip()
-
-print text.encode('utf-8')
 
 def checkPrefix(dic, word):
   for w in dic:
@@ -32,8 +29,8 @@ while idx < len(text) - 1:
     current += 1
   #print text[idx: current]
   if text[idx: current] in dic:
-    print text[idx:current].encode('utf-8'), 'in dic'
-    print dic[text[idx: current]].encode('utf-8')
+    #print text[idx:current].encode('utf-8'), 'in dic'
+    #print dic[text[idx: current]].encode('utf-8')
 
     translation += " " + dic[text[idx: current]]
 
@@ -46,6 +43,7 @@ while idx < len(text) - 1:
 translation = translation.encode('utf-8')
 #print translation
 
+print translation
 f = open('out.txt', 'w')
 f.write(translation)
 f.close()

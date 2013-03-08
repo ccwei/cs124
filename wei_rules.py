@@ -10,13 +10,17 @@ def method_names():
   return ["rule11", "moveWP", "adjNull"]
 
 def conjugate(word):
-	assert(len(word) > 0)
-	if word[-1] == 's':
-		word = word[:-1] + "es"
-	else:
-		word += "s"
+  assert(len(word) > 0)
+  if word[-1] == 's':
+    word = word[:-1] + "es"
+  elif word == 'be':
+    word = 'is'
+  elif word == 'do':
+    word = 'does'
+  else:
+    word += "s"
 
-	return word
+  return word
 
 def rule11(sentence):
   new_sentence = copy.deepcopy(sentence)
@@ -53,7 +57,6 @@ def adjNull(sentence):
 
 
 def moveWP(sentence):
-  print 'sentence = ', sentence
   tmp_sentence = copy.deepcopy(sentence)
   new_sentence = []
   pronoun = -1

@@ -11,7 +11,7 @@ def process_pos_file(pos_filename):
 	lines = [line.rstrip() for line in f]
 	all_text = " ".join(lines)
 	tokens = all_text.split(" ")
-	print(tokens)
+	#print(tokens)
 	sentences = [[]]
 	for token in tokens:
 		if token.split("_")[1] in [".", ",", "?"]:
@@ -24,7 +24,7 @@ def process_pos_file(pos_filename):
 if __name__ == "__main__":
   pos_filename = sys.argv[1]
   sentences = process_pos_file(pos_filename)
-  print len(sentences)
+  #print len(sentences)
   rules = {}
   rules['andyrules'] = (getattr(andyrules, 'method_names')())
   rules['kevin_rules'] = (getattr(kevin_rules, 'method_names')())
@@ -49,5 +49,7 @@ if __name__ == "__main__":
   translation = re.sub(' ,', ',', translation)
   translation = re.sub(' \?', '?', translation)
   translation = re.sub(' ;', ';', translation)
+  translation = re.sub(r' NULL', '', translation)
+  translation = re.sub(r' %s', '%', translation)
   print translation
 
