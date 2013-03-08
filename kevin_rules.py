@@ -7,11 +7,12 @@ import copy
 #7 - Pronoun + NULL => Possessive (I -> my, He/ She -> his/her)
 #8 - JJ VB => RB VB (ex: temporary_JJ give_VBP -> temporarily give)
 #9 - "have" (VB) in the beginning of the sentence or after comma or semicolon or conjunction -> there is/are (depends on whether we next have NN/NNP or NNS/NNPS in sentence - if we have neither then we go with "is" by default)
+#11 - If we see a "self", then we backtrack until we run into a personal pronoun.  If we run into one, then we change "self" into a reflexive pronoun 
 
 pronoun_possession_dict = {"I" : "my", "you" : "your", "they" : "their", "we" : "our", "he" : "his", "she" : "her"}
 
 def method_names():
-  return ["rule5", "rule7", "rule8", "rule3", "rule9"]
+  return ["rule5", "rule7", "rule8", "rule3", "rule9", "rule11"]
 
 
 def is_at_least_two(token):
@@ -35,10 +36,24 @@ def adverbify(word):
 
 	return word
 
+reflexive_dict = {"he" : "himself", "him" : "himself", "she" : "herself", "her" : "herself" ,"you" : "yourself", "I" : "myself", "me" : "myself", "we" : "ourselves", "us" : "ourselves", "they" : "themselves", "them" : "themselves", "it" : "itself"}
+
+def rule11(sentence):
+	new_sentence = copy.deepcopy(sentence)
+	for i in xrange(len(new_sentence)):
+		if new_sentence[i][0] == "self":
+			k = -1
+			for j in xrange(0, i):
+				if new_sentence[j][0] in reflexive_dict:
+					new_sentence[i][0] = reflexive_dict[new_sentence[j][0]]
+					new_sentence[i][1] = "PRP"
+
+	return new_sentence
+
 def rule5(sentence):
 	new_sentence = copy.deepcopy(sentence)
 	for i in xrange(1, len(new_sentence)):
-		if new_sentence[i][0] != "NULL" and new_sentence[i][1] == "NN" and (is_at_least_two(new_sentence[i - 1]) or new_sentence[i - 1][0] in ["these", "those"]):
+		if new_sentence[i][0] != "NULL" and new_sentence[i][1] in  ["NN", "NNP"] and (is_at_least_two(new_sentence[i - 1]) or new_sentence[i - 1][0] in ["these", "those", "different", "many", "multiple"]):
 			new_sentence[i][0] = pluralize(new_sentence[i][0])
 
 	return new_sentence
