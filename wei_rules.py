@@ -20,13 +20,22 @@ def conjugate(word):
 
 def rule11(sentence):
   new_sentence = copy.deepcopy(sentence)
-  for i in xrange(len(new_sentence) - 1):
+  for i in xrange(len(new_sentence) - 2):
     if new_sentence[i][1] == "PRP" and new_sentence[i + 1][1] in ["VB", "VBP"]:
       if new_sentence[i][0] in third_person_pronoun_set:
-        print new_sentence[i][0], new_sentence[i + 1][0]
         new_sentence[i + 1][0] = conjugate(new_sentence[i + 1][0])
-        new_sentence[i + 1][1] = "VBP"
+        new_sentence[i + 1][1] = "VBZ"
+    if new_sentence[i][1] == "PRP" and new_sentence[i + 2][1] in ["VB", "VBP"]:
+      if new_sentence[i][0] in third_person_pronoun_set:
+        new_sentence[i + 2][0] = conjugate(new_sentence[i + 2][0])
+        new_sentence[i + 2][1] = "VBZ"
   
+    if new_sentence[i][1] in ["NN", "NNP"] and new_sentence[i + 1][1] in ["VB", "VBP"]:
+      new_sentence[i + 1][0] = conjugate(new_sentence[i + 1][0])
+      new_sentence[i + 1][1] = "VBZ"
+    if new_sentence[i][1] in ["NN", "NNP"] and new_sentence[i + 2][1] in ["VB", "VBP"]:
+      new_sentence[i + 2][0] = conjugate(new_sentence[i + 2][0])
+      new_sentence[i + 2][1] = "VBZ"
   return new_sentence
 
 def adjNull(sentence):
@@ -44,6 +53,7 @@ def adjNull(sentence):
 
 
 def moveWP(sentence):
+  print 'sentence = ', sentence
   tmp_sentence = copy.deepcopy(sentence)
   new_sentence = []
   pronoun = -1

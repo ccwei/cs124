@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import wei_rules
 import kevin_rules
@@ -14,7 +15,7 @@ def process_pos_file(pos_filename):
 	sentences = [[]]
 	for token in tokens:
 		if token.split("_")[1] == ".":
-			sentences[-1].append(['.', '.'])
+			sentences[-1].append([token.split("_")[0], token.split("_")[0]])
 			sentences.append([])
 		elif len(token) > 0:
 			sentences[-1].append(token.split("_"))
@@ -29,16 +30,24 @@ if __name__ == "__main__":
   rules['kevin_rules'] = (getattr(kevin_rules, 'method_names')())
   rules['wei_rules'] = (getattr(wei_rules, 'method_names')())
 
-  print rules
   translated_sentence = []
   for sentence in sentences:
     for key in ['kevin_rules', 'wei_rules', 'andyrules']: #ensure the sequence of the rule applying
-      print key
       imported_module = importlib.import_module(key)
       for r in rules[key]:
 		    sentence = getattr(imported_module, r)(sentence)
     translated_sentence += sentence
-  print translated_sentence
-  print " ".join([word[0] for word in translated_sentence])
-	  #print '--', sentence
-		#print getattr(wei_rules, 'moveWP')(sentence)
+  #Capitalize
+  translated_sentence[0][0] = translated_sentence[0][0].capitalize()
+  for i in xrange(len(translated_sentence) - 1):
+    if translated_sentence[i][0] == '.':
+      translated_sentence[i + 1][0] = translated_sentence[i + 1][0].capitalize()
+  translation = " ".join([word[0] for word in translated_sentence])
+
+  #Remove extra space
+  translation = re.sub(' \.', '.', translation)
+  translation = re.sub(' ,', ',', translation)
+  translation = re.sub(' \?', '?', translation)
+  translation = re.sub(' ;', ';', translation)
+  print translation
+
