@@ -4,6 +4,11 @@ import sys
 _PLURALS = ['they', 'people']
 _INFINITIVE_BE = ['might', 'to', 'can', 'could', 'should', 'shall']
 
+
+def method_names():
+  return ["rule1", "rule2", "rule3", "rule4", "rule12"]
+
+
 # sentence = [['word1', 'pos1'], ['word2', 'pos2']]
 def rule1(sentence):
 	newSentence = []
@@ -50,10 +55,10 @@ def rule2(sentence):
 	return newSentence
 
 def rule3(sentence):
-	newSentence = []
-	for i in range(0, len(sentence)):
-		print "TODO"
-	return newSentence
+	#newSentence = []
+	#for i in range(0, len(sentence)):
+  #  print "TODO"
+	return sentence
 
 def rule4(sentence):
 	newSentence = []
