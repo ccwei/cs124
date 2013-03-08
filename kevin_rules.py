@@ -38,7 +38,7 @@ def adverbify(word):
 def rule5(sentence):
 	new_sentence = copy.deepcopy(sentence)
 	for i in xrange(1, len(new_sentence)):
-		if new_sentence[i][0] != "NULL" and new_sentence[i][1] == "NN" and (is_at_least_two(new_sentence[i - 1]) or new_sentence[i - 1][0] in ["these", "those"]):
+		if new_sentence[i][0] != "NULL" and new_sentence[i][1] in  ["NN", "NNP"] and (is_at_least_two(new_sentence[i - 1]) or new_sentence[i - 1][0] in ["these", "those"]):
 			new_sentence[i][0] = pluralize(new_sentence[i][0])
 
 	return new_sentence
