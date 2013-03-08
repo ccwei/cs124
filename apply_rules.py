@@ -1,5 +1,6 @@
 import os
 import sys
+import kevin_rules
 
 def process_pos_file(pos_filename):
 	f = open(pos_filename, "r")
@@ -22,4 +23,5 @@ if __name__ == "__main__":
 	sentences = process_pos_file(pos_filename)
 	print len(sentences)
 	for sentence in sentences:
-		print(sentence)
+		print '--', sentence
+		print kevin_rules.moveWP(sentence)

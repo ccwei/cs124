@@ -9,6 +9,8 @@ import copy
 #9 - "have" (VB) in the beginning of the sentence or after comma or semicolon or conjunction -> there is/are (depends on whether we next have NN/NNP or NNS/NNPS in sentence - if we have neither then we go with "is" by default)
 
 pronoun_possession_dict = {"I" : "my", "you" : "your", "they" : "their", "we" : "our", "he" : "his", "she" : "her"}
+third_person_pronoun_set = set(['he', 'she', 'it'])
+pronoun_set = set(['I', 'you', 'he', 'she', 'it', 'they', 'we'])
 
 def is_at_least_two(token):
 	return token[1] == "CD" and token[0] not in ["one", "1"]
@@ -68,6 +70,26 @@ def rule8(sentence):
 
 	return new_sentence
 
+def conjugate(word):
+	assert(len(word) > 0)
+	if word[-1] == 's':
+		word = word[:-1] + "es"
+	else:
+		word += "s"
+
+	return word
+
+def rule11(sentence):
+	new_sentence = copy.deepcopy(sentence)
+	for i in xrange(len(new_sentence) - 1):
+		if new_sentence[i][1] == "PRP" and new_sentence[i + 1][1] in ["VB", "VBP"]:
+			print new_sentence[i][0], new_sentence[i + 1][0]
+			new_sentence[i + 1][0] = conjugate(new_sentence[i + 1][0])
+			new_sentence[i + 1][1] = "VBP"
+
+	return new_sentence
+
+
 def rule3(sentence):
 	new_sentence = []
 	just_applied_rule = 0
@@ -120,3 +142,37 @@ def rule9(sentence):
 			new_sentence.append(sentence[i])
 
 	return new_sentence
+
+def moveWP(sentence):
+  tmp_sentence = copy.deepcopy(sentence)
+  new_sentence = []
+  pronoun = -1
+  delete_idx = []
+  for i in xrange(len(sentence)):
+    if sentence[i][0] in pronoun_set:
+      pronoun = i
+      break
+
+  for i in xrange(len(sentence)):
+    if sentence[i][1] in ["WP", "WRB"]:
+      new_sentence.append(sentence[i])
+      delete_idx.append(i)
+      if i + 1 < len(sentence) and sentence[i+1][1] in ["RB"]:
+        new_sentence.append(sentence[i + 1])
+        delete_idx.append(i + 1)
+
+      if i > 0 and sentence[i - 1][1] in ["VB", "VBP"]:
+        new_sentence.append(["do", "DO"])
+        if pronoun != -1:
+          new_sentence.append(sentence[pronoun])
+          delete_idx.append(pronoun)
+        new_sentence.append(sentence[i - 1])
+        delete_idx.append(i- 1)
+        break
+  delete_idx.sort(reverse=True)
+  for i in xrange(len(delete_idx)):
+    tmp_sentence.pop(delete_idx[i])
+  for i in xrange(len(tmp_sentence)):
+    new_sentence.append(tmp_sentence[i])
+  return new_sentence
+
