@@ -3,6 +3,7 @@ import sys
 
 _PLURALS = ['they', 'people']
 _INFINITIVE_BE = ['might', 'to', 'can', 'could', 'should', 'shall']
+_BE = ['is', 'are', 'be']
 
 
 def method_names():
@@ -89,7 +90,7 @@ def rule12(sentence):
 			prevWordPos = sentence[i-1]
 
 			if wordPos[1][:2] == 'VB' and prevWordPos[1][:2] == 'VB':
-				if wordPos[0] != 'NULL' and prevWordPos[0] != 'NULL':
+				if wordPos[0] != 'NULL' and prevWordPos[0] != 'NULL' and (not prevWordPos[0].lower() in _BE):
 					toWordPos = ['to', 'TO']
 					newSentence.append(toWordPos)
 
